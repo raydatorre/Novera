@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-import { ORACULO_SYSTEM, ORACULO_SCHEMA } from "@/lib/oraculoPrompt";
-import { fpc, phiDeg, fp, biggestLeak } from "@/lib/oraculoMath";
+import { ORACULO_SYSTEM, ORACULO_SCHEMA } from "../../../lib/oraculoPrompt";
+import { fpc, phiDeg, fp, biggestLeak } from "../../../lib/oraculoMath";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
