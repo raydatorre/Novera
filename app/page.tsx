@@ -20,10 +20,8 @@ export default function Page() {
   const [history, setHistory] = useState<Msg[]>([]);
   const [chat, setChat] = useState('');
 
-  // métricas recalculadas pelo chat (se vierem)
   const [recalc, setRecalc] = useState<{ FPC: number; phi_deg: number; FP: number } | null>(null);
 
-  // restaura última leitura do localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem('oraculo:last');
@@ -86,7 +84,6 @@ export default function Page() {
           phi_deg: j.updated.metrics.phi_deg,
           FP: j.updated.metrics.FP
         });
-        // atualiza métricas na leitura em memória
         setReading((r: any) => (r ? { ...r, metrics: { ...r.metrics, ...j.updated.metrics } } : r));
       }
     } catch {
