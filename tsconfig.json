@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["dom", "dom.iterable", "es2022"],
-    "jsx": "preserve",
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
     "moduleResolution": "Bundler",
-    "baseUrl": ".",
-    "paths": { "@/*": ["./*"] },
+    "jsx": "preserve",
+    "allowJs": false,
     "strict": true,
     "noEmit": true,
-    "skipLibCheck": true
+    "baseUrl": ".",
+    "paths": { "@/*": ["./*"] }
   },
   "include": ["app", "lib", "types", "next-env.d.ts"]
 }
