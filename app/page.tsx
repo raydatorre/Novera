@@ -134,4 +134,60 @@ export default function Page() {
 
       {reading && (
         <div className="cards g2" style={{ marginTop: 12 }}>
-          <div className="card"><h3>Mapa (2.0)<
+          <div className="card"><h3>Mapa (2.0)</h3><p>{reading.block_A_map || ''}</p></div>
+          <div className="card"><h3>Harmônico (3.0)</h3><p>{reading.block_B_harmonic || ''}</p></div>
+          <div className="card"><h3>Energia (DC/AC)</h3><p>{reading.block_C_energy || ''}</p></div>
+          <div className="card"><h3>Esotérico</h3><p>{reading.block_D_esoteric || ''}</p></div>
+
+          <div className="card" style={{ gridColumn: '1 / -1' }}>
+            <h3>Tríptico</h3>
+            <pre style={{ whiteSpace: 'pre-wrap' }}>
+ELI5: {reading.block_E_triptych?.eli5 || ''}
+Scientist: {reading.block_E_triptych?.scientist || ''}
+Poet: {reading.block_E_triptych?.poet || ''}
+            </pre>
+          </div>
+
+          <div className="card" style={{ gridColumn: '1 / -1' }}>
+            <h3>Métricas (JSON)</h3>
+            <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(m, null, 2)}</pre>
+          </div>
+
+          <div className="card" style={{ gridColumn: '1 / -1' }}>
+            <h3>Diagnóstico</h3>
+            <p>{reading.diagnostic?.summary || '—'}</p>
+            {Array.isArray(reading.diagnostic?.actions) && reading.diagnostic!.actions!.length > 0 && (
+              <ul>
+                {reading.diagnostic!.actions!.map((a, i) => <li key={i}>{a}</li>)}
+              </ul>
+            )}
+          </div>
+
+          {raw && (
+            <div className="card" style={{ gridColumn: '1 / -1' }}>
+              <details>
+                <summary>RAW (debug)</summary>
+                <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(raw, null, 2)}</pre>
+              </details>
+            </div>
+          )}
+        </div>
+      )}
+
+      <h2 className="sectionTitle">Pergunte ao Oráculo</h2>
+      <div className="grid g2">
+        <input className="inp" value={chat} onChange={e => setChat(e.target.value)} placeholder="ex.: onde focar essa semana?" />
+        <button className="btn" onClick={sendChat}>Enviar</button>
+      </div>
+
+      {!!history.length && (
+        <div className="card" style={{ marginTop: 12 }}>
+          {history.map((m, i) => (
+            <p key={i}><b>{m.role === 'user' ? 'Você' : 'Oráculo'}:</b> {m.content}</p>
+          ))}
+          {recalc && <p style={{ color: '#3347B0', fontWeight: 700 }}>Recalibrado agora → FPC {recalc.FPC} • φ° {recalc.phi_deg} • FP {recalc.FP}</p>}
+        </div>
+      )}
+    </div>
+  );
+}
