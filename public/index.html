@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Oráculo 3.1 (MVP)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Arial;margin:24px;max-width:980px}
+    label{display:block;margin:.6rem 0 .2rem}
+    input,button{width:100%;padding:.6rem;border:1px solid #ccc;border-radius:8px}
+    button{background:#3347B0;color:#fff;font-weight:600;cursor:pointer}
+    .grid{display:grid;gap:12px}
+    .two{grid-template-columns:1fr 1fr}
+    .cards{display:grid;gap:12px}
+    @media(min-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}
+    .card{border:1px solid #eee;border-radius:12px;padding:12px}
+    pre{background:#0a0a0a;color:#eaeaea;padding:12px;border-radius:8px;overflow:auto}
+  </style>
+</head>
+<body>
+  <h1>Oráculo dos Números Mágicos 3.1 — MVP</h1>
+
+  <div class="grid two">
+    <div>
+      <label>Nome completo</label>
+      <input id="full_name" placeholder="Ex.: Giovana Previato Torres" />
+    </div>
+    <div>
+      <label>Data (DD/MM/AAAA)</label>
+      <input id="dob" placeholder="19/07/2013" />
+    </div>
+  </div>
+
+  <div class="grid two" style="margin-top:12px">
+    <div>
+      <label>R (0–100, opcional)</label>
+      <input id="R" type="number" min="0" max="100" />
+    </div>
+    <div>
+      <label>Q (0–100, opcional)</label>
+      <input id="Q" type="number" min="0" max="100" />
+    </div>
+  </div>
+
+  <label style="margin-top:12px">Palavras-chave (opcional)</label>
+  <input id="kw" placeholder="harmonia, intuição, equilíbrio" />
+
+  <div class="grid two" style="margin-top:12px">
+    <div>
+      <label>Temperatura (0–1)</label>
+      <input id="temp" type="number" step="0.1" min="0" max="1" value="0.2" />
+    </div>
+    <div>
+      <label>&nbsp;</label>
+      <button id="btn">Gerar mapa</button>
+    </div>
+  </div>
+
+  <h2 style="margin-top:20px">Resultado</h2>
+  <div id="cards" class="cards"></div>
+
+  <h3>Métricas</h3>
+  <pre id="metrics"></pre>
+
+  <h3>Diagnóstico</h3>
+  <pre id="report"></pre>
+
+  <details style="margin-top:8px">
+    <summary>RAW (debug)</summary>
+    <pre id="raw"></pre>
+  </details>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    $('btn').addEventListener('click', async () => {
+      const payload = {
+        full_name: $('full_name').value,
+        dob_DDMMYYYY: $('dob').value,
+        R: $('R').value ? Number($('R').value) : null,
+        Q: $('Q').value ? Number($('Q').value) : null,
+        keywords: $('kw').value,
+        temperature: Number($('temp').value || 0.2)
+      };
+
+      const r = await fetch('/api/oraculo', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const j = await r.json();
+
+      $('raw').textContent = j.raw || '';
+
+      if (!j.ok) {
+        $('cards').innerHTML = '<p>Falha ao gerar JSON. Veja a aba RAW para depurar.</p>';
+        $('metrics').textContent = '';
+        $('report').textContent = j.error || '';
+        return;
+      }
+
+      const { blocks, metrics, report } = j.data;
+
+      $('cards').innerHTML = `
+        <div class="card"><h4>Mapa</h4><p>${blocks.block_A_map || ''}</p></div>
+        <div class="card"><h4>Harmônico</h4><p>${blocks.block_B_harmonic || ''}</p></div>
+        <div class="card"><h4>Energia</h4><p>${blocks.block_C_energy || ''}</p></div>
+        <div class="card"><h4>Esotérico</h4><p>${blocks.block_D_esoteric || ''}</p></div>
+        <div class="card" style="grid-column:1 / -1"><h4>Tríptico</h4><p>${blocks.block_E_triptych || ''}</p></div>
+      `;
+      $('metrics').textContent = JSON.stringify(metrics || {}, null, 2);
+      $('report').textContent = JSON.stringify(report || {}, null, 2);
+    });
+  </script>
+</body>
+</html>
