@@ -104,4 +104,80 @@
       b.className = 'bubble';
       b.innerHTML = `<strong>${role==='user'?'Você':'Oráculo'}:</strong> ${content}`;
       div.appendChild(b);
-      $('chatlog').ap
+      $('chatlog').appendChild(div);
+      $('chatlog').scrollTop = $('chatlog').scrollHeight;
+    }
+
+    $('btn').addEventListener('click', async () => {
+      const payload = {
+        full_name: $('full_name').value,
+        dob_DDMMYYYY: $('dob').value,
+        R: $('R').value ? Number($('R').value) : null,
+        Q: $('Q').value ? Number($('Q').value) : null,
+        keywords: $('kw').value,
+        temperature: Number($('temp').value || 0.2)
+      };
+
+      const r = await fetch('/api/oraculo', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const j = await r.json();
+
+      $('raw').textContent = j.raw || '';
+
+      if (!j.ok) {
+        $('cards').innerHTML = '<p>Falha ao gerar JSON. Veja a aba RAW para depurar.</p>';
+        $('metrics').textContent = '';
+        $('report').textContent = j.error || '';
+        return;
+      }
+
+      const d = j.data;
+      lastReading = d; // guarda para o chat
+      history = [];    // reset chat a cada nova leitura
+      $('chatlog').innerHTML = '';
+
+      // Blocos
+      $('cards').innerHTML = `
+        <div class="card"><h4>Mapa (2.0)</h4><p>${d.block_A_map || ''}</p></div>
+        <div class="card"><h4>Harmônico (3.0)</h4><p>${d.block_B_harmonic || ''}</p></div>
+        <div class="card"><h4>Energia (DC/AC)</h4><p>${d.block_C_energy || ''}</p></div>
+        <div class="card"><h4>Esotérico</h4><p>${d.block_D_esoteric || ''}</p></div>
+        <div class="card" style="grid-column:1 / -1"><h4>Tríptico</h4>
+          <p><strong>ELI5:</strong> ${d.block_E_triptych?.eli5 || ''}</p>
+          <p><strong>Scientist:</strong> ${d.block_E_triptych?.scientist || ''}</p>
+          <p><strong>Poet:</strong> ${d.block_E_triptych?.poet || ''}</p>
+        </div>
+      `;
+
+      // Badges de métricas
+      const m = d.metrics || {};
+      $('badgeFPC').textContent = `FPC: ${m.FPC ?? '–'}`;
+      $('badgePhi').textContent = `φ°: ${m.phi_deg ?? '–'}`;
+      $('badgeFP').textContent = `FP: ${m.FP ?? '–'}`;
+      $('badgeLeak').textContent = `Vazamento: ${m.biggest_leak ?? '–'}`;
+
+      $('metrics').textContent = JSON.stringify(m || {}, null, 2);
+      const diag = d.diagnostic || {};
+      $('report').textContent = (diag.summary || '') + '\n\nAções: ' + (Array.isArray(diag.actions)? diag.actions.join('; ') : '');
+    });
+
+    $('sendchat').addEventListener('click', async () => {
+      const q = $('chatinput').value.trim();
+      if (!q || !lastReading) return;
+      $('chatinput').value = '';
+      pushChat('user', q);
+
+      const r = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ history, lastReading })
+      });
+      const j = await r.json();
+      pushChat('assistant', j.reply || '...');
+    });
+  </script>
+</body>
+</html>
