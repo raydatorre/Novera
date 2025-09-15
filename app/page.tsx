@@ -9,39 +9,41 @@ type Reading = {
   block_C_energy?: string;
   block_D_esoteric?: string;
   block_E_triptych?: { eli5?: string; scientist?: string; poet?: string };
+  diagnostic?: { summary?: string; actions?: string[] };
   metrics?: {
     R?: number; Q?: number; DC?: number; AC_real?: number; AC_imag?: number;
     FPC?: number; phi_deg?: number; FP?: number; biggest_leak?: string;
     Q_factors?: { name: string; value: number }[];
   };
-  diagnostic?: { summary?: string; actions?: string[] };
 };
 
 export default function Page() {
+  // Form
   const [fullName, setFullName] = useState('');
-  const [dob, setDob] = useState('');
+  const [dob, setDob] = useState('19/07/2013');
   const [feel, setFeel] = useState('');
+  const [R, setR] = useState<string>('');          // opcional
+  const [Q, setQ] = useState<string>('');          // opcional
   const [kw, setKw] = useState('');
   const [temp, setTemp] = useState(0.2);
+
+  // App state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [reading, setReading] = useState<Reading | null>(null);
   const [history, setHistory] = useState<Msg[]>([]);
   const [chat, setChat] = useState('');
   const [recalc, setRecalc] = useState<{ FPC: number; phi_deg: number; FP: number } | null>(null);
+  const [raw, setRaw] = useState<any>(null);
 
+  // restore
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('oraculo:last');
-      if (saved) setReading(JSON.parse(saved));
-    } catch {}
+    try { const saved = localStorage.getItem('oraculo:last'); if (saved) setReading(JSON.parse(saved)); } catch {}
   }, []);
-  useEffect(() => {
-    if (reading) localStorage.setItem('oraculo:last', JSON.stringify(reading));
-  }, [reading]);
+  useEffect(() => { if (reading) localStorage.setItem('oraculo:last', JSON.stringify(reading)); }, [reading]);
 
   async function generate() {
-    setLoading(true); setError(null); setRecalc(null); setHistory([]);
+    setLoading(true); setError(null); setRecalc(null); setHistory([]); setRaw(null);
     try {
       const res = await fetch('/api/oraculo', {
         method: 'POST', headers: { 'content-type': 'application/json' },
@@ -49,6 +51,8 @@ export default function Page() {
           full_name: fullName,
           dob_DDMMYYYY: dob,
           feelings: feel,
+          R: R.trim() ? Number(R) : null,
+          Q: Q.trim() ? Number(Q) : null,
           keywords: kw,
           temperature: temp
         })
@@ -56,11 +60,10 @@ export default function Page() {
       const j = await res.json();
       if (j.error) throw new Error(j.detail || 'Falha');
       setReading(j);
+      setRaw(j.raw_model ?? null);
     } catch (e: any) {
       setError(e?.message || 'Erro ao gerar');
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   }
 
   async function sendChat() {
@@ -83,77 +86,52 @@ export default function Page() {
     }
   }
 
-  const card: React.CSSProperties = { border: '1px solid #eee', borderRadius: 12, padding: 12 };
-
   const m = reading?.metrics || {};
   return (
-    <div style={{ maxWidth: 980, margin: '24px auto', padding: 12 }}>
-      <h1 style={{ fontSize: 28, fontWeight: 800 }}>Oráculo dos Números Mágicos 3.1</h1>
+    <div className="container">
+      <h1>Oráculo dos Números Mágicos 3.1</h1>
 
-      <div style={{ display: 'grid', gap: 12, gridTemplateColumns: '1fr 1fr', marginTop: 12 }}>
+      <div className="grid g2" style={{ marginTop: 12 }}>
         <label>Nome completo
-          <input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Ex.: Giovana Previato Torres" />
+          <input className="inp" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Ex.: Giovana Previato Torres" />
         </label>
         <label>Data (DD/MM/AAAA)
-          <input value={dob} onChange={e => setDob(e.target.value)} placeholder="19/07/2013" />
+          <input className="inp" value={dob} onChange={e => setDob(e.target.value)} placeholder="19/07/2013" />
         </label>
       </div>
 
-      <label style={{ display: 'block', marginTop: 12 }}>Como você tem se sentido nos últimos dias/semanas?
-        <textarea rows={3} value={feel} onChange={e => setFeel(e.target.value)} placeholder="Ex.: ansioso com prazos e cobranças" />
-      </label>
-
-      <div style={{ display: 'grid', gap: 12, gridTemplateColumns: '1fr 1fr', marginTop: 12 }}>
-        <label>Palavras-chave (opcional)
-          <input value={kw} onChange={e => setKw(e.target.value)} placeholder="harmonia, intuição, equilíbrio" />
+      <div className="grid g2" style={{ marginTop: 12 }}>
+        <label>R (0–100, opcional)
+          <input className="inp" type="number" min={0} max={100} value={R} onChange={e => setR(e.target.value)} />
         </label>
+        <label>Q (0–100, opcional)
+          <input className="inp" type="number" min={0} max={100} value={Q} onChange={e => setQ(e.target.value)} />
+        </label>
+      </div>
+
+      <label className="sectionTitle" style={{ display: 'block' }}>Palavras-chave (opcional)</label>
+      <input className="inp" value={kw} onChange={e => setKw(e.target.value)} placeholder="harmonia, intuição, equilíbrio" />
+
+      <div className="grid g2" style={{ marginTop: 12 }}>
         <label>Temperatura (0–1)
-          <input type="number" step={0.1} min={0} max={1} value={temp} onChange={e => setTemp(Number(e.target.value))} />
+          <input className="inp" type="number" step={0.1} min={0} max={1} value={temp} onChange={e => setTemp(Number(e.target.value))} />
         </label>
+        <div className="row" style={{ justifyContent: 'flex-end', alignSelf: 'end' }}>
+          <button className="btn" onClick={generate} disabled={loading}>{loading ? 'Gerando…' : 'Gerar mapa'}</button>
+          {error && <span style={{ color: '#c00', marginLeft: 10 }}>{error}</span>}
+        </div>
       </div>
 
-      <div style={{ marginTop: 12 }}>
-        <button onClick={generate} disabled={loading} style={{ padding: 12, borderRadius: 8, background: '#3347B0', color: '#fff' }}>
-          {loading ? 'Gerando…' : 'Gerar mapa'}
-        </button>
-        {error && <span style={{ color: '#c00', marginLeft: 8 }}>{error}</span>}
+      <h2 className="sectionTitle" style={{ marginTop: 16 }}>Resultado</h2>
+
+      {/* chips de métricas */}
+      <div className="chips">
+        <span className="chip">FPC: {m.FPC ?? '–'}</span>
+        <span className="chip">φ°: {m.phi_deg ?? '–'}</span>
+        <span className="chip">FP: {m.FP ?? '–'}</span>
+        <span className="chip">Vazamento: {m.biggest_leak ?? '–'}</span>
       </div>
 
       {reading && (
-        <div style={{ marginTop: 20 }}>
-          <div style={{ display: 'grid', gap: 12, gridTemplateColumns: '1fr 1fr' }}>
-            <div style={card}><h3>Mapa (2.0)</h3><p>{reading.block_A_map || ''}</p></div>
-            <div style={card}><h3>Harmônico (3.0)</h3><p>{reading.block_B_harmonic || ''}</p></div>
-            <div style={card}><h3>Energia (DC/AC)</h3><p>{reading.block_C_energy || ''}</p></div>
-            <div style={card}><h3>Esotérico</h3><p>{reading.block_D_esoteric || ''}</p></div>
-            <div style={{ ...card, gridColumn: '1 / -1' }}>
-              <h3>Tríptico</h3>
-              <pre style={{ whiteSpace: 'pre-wrap' }}>
-ELI5: {reading.block_E_triptych?.eli5 || ''}
-Scientist: {reading.block_E_triptych?.scientist || ''}
-Poet: {reading.block_E_triptych?.poet || ''}
-              </pre>
-            </div>
-          </div>
-
-          <div style={{ ...card, marginTop: 12 }}>
-            <h3>Métricas</h3>
-            <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(m, null, 2)}</pre>
-            {recalc && <p>Recalibrado agora: FPC {recalc.FPC} • φ° {recalc.phi_deg} • FP {recalc.FP}</p>}
-          </div>
-
-          <div style={{ ...card, marginTop: 12 }}>
-            <h3>Pergunte ao Oráculo</h3>
-            <div>
-              <input value={chat} onChange={e => setChat(e.target.value)} placeholder="Hoje acordei ansioso por causa de..." />
-              <button onClick={sendChat} style={{ marginLeft: 8 }}>Enviar</button>
-            </div>
-            <div style={{ marginTop: 8 }}>
-              {history.map((m, i) => <p key={i}><b>{m.role === 'user' ? 'Você' : 'Oráculo'}:</b> {m.content}</p>)}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+        <div className="cards g2" style={{ marginTop: 12 }}>
+          <div className="card"><h3>Mapa (2.0)<
