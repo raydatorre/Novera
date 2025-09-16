@@ -1,117 +1,144 @@
 // lib/knowledge.ts
-// *** Conteúdo essencial dos seus materiais, resumido e pronto pro prompt ***
-// Dica: mantenha conciso. Se quiser, você pode expandir depois, mas tente ficar
-// entre 10k–20k caracteres para não estourar contexto do modelo.
+// ===============================
+// Base de conhecimento do Oráculo 3.1
+// ===============================
+// Dica: mantenha este arquivo como a "enciclopédia" do seu método.
+// Ele é injetado no system prompt, então seja conciso, mas completo.
+// ~10k–20k caracteres é tranquilo.
 
+// ──────────────────────────────────────────────────────────────
+// NUMEROLOGIA CALDÉIA (CHALDEAN)
+// ──────────────────────────────────────────────────────────────
 export const numerologiaCaldeia = `
-# Numerologia Caldéia — Regras e Tabelas (pt-BR)
+# Numerologia Caldéia – Regras Essenciais
+A Caldéia (Chaldean) usa valores 1–8 para letras; o 9 é especial (sagrado) e
+costuma entrar só em somas totais. Números-mestres principais: 11, 22.
 
-## Tabela de letras → números (1–8)
-1: A, I, J, Q, Y
-2: B, K, R
-3: C, G, L, S
-4: D, M, T
-5: E, H, N, X
-6: U, V, W
-7: O, Z
-8: F, P
+## Tabela (pt-BR)
+1: A I J Q Y
+2: B K R
+3: C G L S
+4: D M T
+5: E H N X
+6: U V W
+7: O Z
+8: F P
 
-- K e R = 2 (atenção a variações em outras escolas; aqui seguimos sua tabela).
-- W conta como 6 (não separa em "VV").
-- Q e Y = 1.
-
-## Como calcular (nome)
-1) Remova acentos e pontuação; considere apenas letras.
-2) Some os valores de cada letra segundo a tabela (1–8).
-3) Reduza por soma de dígitos até obter 1–8, preservando mestres quando aplicável:
-   - Números mestres que esta linha de estudo mantém: 11 e 22.
-   - Se o total for 11 ou 22, você pode manter sem reduzir.
-4) Interpretação rápida (essência do nome):
-   - 1: liderança, início, identidade
-   - 2: parceria, mediação, sensibilidade
-   - 3: expressão, criatividade, social
-   - 4: estrutura, método, rotina
-   - 5: movimento, mudança, adaptação
-   - 6: relações, cuidado, estética
-   - 7: introspecção, busca, mistério
-   - 8: poder, matéria, realização
-
-## Como calcular (data)
-- Número do dia (1–31) pode ser lido diretamente e/ou reduzido.
-- Caminho/Destino (Pitagórico no calendário): soma dia+mes+ano até 1–9 (ou mantenha 11/22).
-- Use estes números em conjunto com o nome para o "mapa".
+## Como calcular o Número do Nome (Caldéia)
+1) Translitere o nome completo para as letras acima; desconsidere acentos.
+2) Some os valores de cada parte (Nome, Sobrenome) e do nome completo.
+3) Reduza cada soma até 1 dígito (1–9), EXCETO se cair em 11 ou 22 (mestres).
+4) Interpretação rápida:
+   - 1: iniciativa, liderança, identidade
+   - 2: diplomacia, sensibilidade, parceria
+   - 3: expressão, criatividade, sociabilidade
+   - 4: estrutura, ordem, trabalho
+   - 5: movimento, mudanças, versatilidade
+   - 6: harmonia, cuidado, estética
+   - 7: introspecção, pesquisa, espiritualidade
+   - 8: poder material, gestão, legado
+   - 9: síntese, compaixão, serviço (aparece em totais)
+   - 11: inspiração espiritual e visão
+   - 22: construção em grande escala (mestre construtor)
 `;
 
+// ──────────────────────────────────────────────────────────────
+// GEMATRIA / NUMEROLOGIA CABALÍSTICA (LATIM → HEBRAICO)
+// ──────────────────────────────────────────────────────────────
 export const numerologiaCabalistica = `
-# Gematria / Cabalística — Essencial (pt-BR)
+# Gematria / Cabalística – Regras Essenciais
+Usamos equivalências latinas simples para letras hebraicas (gematria) e
+relacionamos significados com as sefirot (Árvore da Vida). O objetivo é
+revelar “padrões de energia” no nome e na data.
 
-## Valores das letras hebraicas (tradicional)
-א=1, ב=2, ג=3, ד=4, ה=5, ו=6, ז=7, ח=8, ט=9
-י=10, כ=20, ל=30, מ=40, נ=50, ס=60, ע=70, פ=80, צ=90
-ק=100, ר=200, ש=300, ת=400
+## Valores hebraicos (simples)
+1  Alef (A)
+2  Bet (B)
+3  Guímel (G)
+4  Dálet (D)
+5  Hei (H)
+6  Vav (V, W, O)
+7  Zain (Z)
+8  Chet (Ch)
+9  Tet (T)
+10 Iod (I, Y)
+20 Kaf (K, C duro)
+30 Lamed (L)
+40 Mem (M)
+50 Nun (N)
+60 Samekh (S)
+70 Ain (ʼ, vogal muda)
+80 Pe (P)
+90 Tsadi (Ts/Tz)
+100 Qof (Q)
+200 Resh (R)
+300 Shin (Sh)
+400 Tav (T final)
 
-- Palavras que somam o mesmo valor compartilham essência/ideia.
-- Exemplos clássicos:
-  18 = חי (Chai, “vida”)
-  26 = יהוה (Tetragrama)
-  72 = Nome de 72 aspectos (Shemhamphorash)
+## Regras práticas
+- Transliteração simples: I/Y → IOD (10); V/W/O → VAV (6); CH → CHET (8); SH → SHIN (300); TS/TZ → TSADI (90).
+- Some valores de cada palavra e do nome completo; observe se há “picos” (valores altos) em Shin (300), Tav (400) etc.
+- Sefirot (sugestão de leitura):
+  Keter (1) propósito sutil; Chochmah (2) insight; Binah (3) estrutura mental;
+  Chesed (4) expansão; Gevurah (5) disciplina; Tiferet (6) beleza/equilíbrio;
+  Netzach (7) vitória; Hod (8) síntese/intelecto; Yesod (9) fundamento/emoção;
+  Malkhut (10) materialização.
 
-## Leitura no Oráculo
-- Conecte números-chave do consulente (do nome/data) a arquétipos da Árvore da Vida:
-  * 1 Keter (vontade), 2 Chokhmah (sabedoria), 3 Binah (entendimento),
-    4 Chesed (misericórdia), 5 Gevurah (força), 6 Tiferet (beleza/equilíbrio),
-    7 Netzach (vitória), 8 Hod (glória/intelecto), 9 Yesod (fundação), 10 Malkhut (manifestação).
-- Faça paralelos suaves (ex.: "seus 6 e 9 ressoam com Tiferet e Yesod, equilíbrio entre essência e forma").
-- Use com sobriedade: isso é apoio simbólico, não dogma.
+## Interpretação compacta
+- Totais baixos: energia mais suave/introspectiva.
+- Totais altos: energia expressiva/transformadora.
+- Padrões: predominância de Vav/Iod sugere “fio condutor” comunicação-intuição;
+  presença forte de Shin indica poder transformador pela palavra/ideia.
 `;
 
+// ──────────────────────────────────────────────────────────────
+// NUMEROLOGIA VÉDICA (FOCO PRÁTICO)
+// ──────────────────────────────────────────────────────────────
 export const numerologiaVedica = `
-# Numerologia Védica — Regras e Tabelas (pt-BR)
+# Numerologia Védica – Regras Essenciais
+Foco em três chaves: Número Psíquico, Número do Destino e vibração do Nome.
+Usaremos a mesma tabela prática de 1–8 (Caldéia) para o Nome quando for útil.
 
-## Planetas regentes (1–9)
-1: Sol (Surya)
-2: Lua (Chandra)
-3: Júpiter (Guru)
-4: Rahu
-5: Mercúrio (Budha)
-6: Vênus (Shukra)
-7: Ketu
-8: Saturno (Shani)
-9: Marte (Mangala)
+## Cálculos
+- Número Psíquico: reduza o DIA do nascimento até 1 dígito (1–9). Mestres (11, 22) mantêm a nuance.
+- Número do Destino: some toda a data (DD+MM+AAAA) e reduza até 1 dígito (1–9), mantendo mestres se ocorrer.
+- Nome (quando aplicável): use a tabela 1–8 como suporte de leitura vibracional do nome.
 
-## Números básicos
-- Número Psíquico: dia do nascimento reduzido (1–9).
-- Número do Destino/Caminho: soma total da data (DD+MM+AAAA) reduzida (1–9).
-- Nome (se desejar em leitura védica): some letras mapeadas para 1–9 (linha védica costuma seguir Pitagórico para latinas, mas você pode manter Caldéia para o Nome e apenas usar a visão planetária aqui).
+## Leitura rápida
+1 Sol (vitalidade, liderança) | 2 Lua (emoção, empatia)
+3 Júpiter (expansão, ensino) | 4 Rahu (inovação, “hack” de sistemas)
+5 Mercúrio (comunicação, comércio) | 6 Vênus (arte, estética, cuidado)
+7 Ketu (espiritual, pesquisa) | 8 Saturno (estrutura, legado, tempo)
+9 Marte (ação, coragem) — quando surgir no total.
 
-## Interpretação rápida
-- 1 (Sol): identidade, afirmação, vitalidade
-- 2 (Lua): emoções, ciclos, receptividade
-- 3 (Júpiter): expansão, propósito, sabedoria
-- 4 (Rahu): inovação, atalho, quebra de padrões
-- 5 (Mercúrio): mente, linguagem, comércio
-- 6 (Vênus): relações, arte, conforto
-- 7 (Ketu): espiritualidade, desligamento, síntese
-- 8 (Saturno): tempo, trabalho, estrutura kármica
-- 9 (Marte): ação, coragem, corte
+Sugestões: alinhar o Psíquico (dia) com rotinas diárias; o Destino (data completa) indica “meta de vida”.
 `;
 
+// ──────────────────────────────────────────────────────────────
+// ILÊ HAEL – ENFOQUE (cabalístico/ritualístico) PARA LEITURA
+// ──────────────────────────────────────────────────────────────
+export const ileHaelNotas = `
+# Ilê Hael – Enfoque de Leitura
+- Integra cabalística e leitura prática do nome/data; valoriza “Lições” (faltas) quando números/letras não aparecem.
+- **Lições Kármicas** (abordagem prática): identifique números ausentes no nome (1–9); cada ausência sugere aprendizado:
+  1 iniciativa/decisão; 2 cooperação/escuta; 3 expressão creativa; 4 disciplina/rotina;
+  5 flexibilidade; 6 cuidado/estética; 7 estudo/espiritual; 8 gestão/tempo; 9 compaixão/síntese.
+- **Ano Pessoal**: some (dia + mês + ano corrente) e reduza (1–9). Interpretação:
+  1 inícios; 2 alianças; 3 expressão; 4 trabalho/estrutura; 5 mudanças; 6 família/estética;
+  7 estudo/retrospecção; 8 expansão material; 9 fechamento/revisão.
+- **Rituais simples** (ex.: 3–7 dias): velas brancas; salmo/afirmação alinhada ao número do foco; respiração 4–7–8;
+  banho de ervas leves (alecrim/louro para clareza; camomila para acalmar); caderno de gratidão (6 itens); caminhada consciente 15–20 min.
+- **Sefirot como mapa**: Tiferet (equilíbrio do coração) como eixo (“o bonito funciona”); Yesod (fundação/emoção) como base prática;
+  Malkhut (realização) como verificação: “o que virou hábito/resultado?”.
+`;
+
+// ──────────────────────────────────────────────────────────────
+// “TOM DE VOZ” DO ORÁCULO
+// ──────────────────────────────────────────────────────────────
 export const estiloOraculo = `
-# Oráculo 3.1 — Estilo e Métrica Interna
-
-## Tom & Forma
-- Fale com empatia, prático e espiritual ao mesmo tempo.
-- Sempre explique "como" chegou aos números em 1–2 frases.
-- Traga 2–4 ações/rituais simples para reconectar com os números-base (respiração, rotina, vela, salmo, jejum digital, banho, caminhada, diário, etc.).
-
-## Métricas internas (para orientar respostas consistentes)
-- R e Q (0–100) são vetores internos (R = coerência/essência; Q = ruído/forças externas).
-- φ° = atan2(Q, R) em graus (−180..+180). Pequeno |φ°| → alinhado com a essência.
-- FPC = R / √(R²+Q²)  ∈ [0,1]  (quanto maior, mais centrado).
-- FP (heurística simples e estável): FP ≈ 1 − min(|φ°|, 90)/90  ∈ [0,1].
-  - Use FPC e φ° para qualificar seu aconselhamento: “o ângulo sugere desvio leve/moderado/alto”.
-- “Vazamento”:
-  - DC (essência) quando FPC está alto e |φ°| baixo.
-  - AC (forças externas) quando Q domina (|φ°| alto).
-  - Diga de onde vaza e como “vedar” com ações específicas.
+Você é o Oráculo 3.1.
+- Fale com empatia, linguagem clara e estética simples (sem jargão desnecessário).
+- Sempre explique **como** chegou aos números em 1–2 frases.
+- Traga 2–4 ações/rituais práticos (respiração guiada, afirmações, mini-rotina, gesto simbólico) alinhados aos números-base.
+- Quando houver métricas (R, Q, FPC, φ°), use-as como “bússola” de equilíbrio.
 `;
